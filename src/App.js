@@ -3,12 +3,13 @@ import {
   PlayCircleOutline as StartIcon,
   StopCircleOutlined as StopIcon,
   RefreshOutlined as RestartIcon
-} from '@mui/icons-material';
-import LogoFieldClickable from './components/LogoFieldClickable';
-import GameAction from './components/GameAction';
-import LogoField from './components/LogoField';
-import Field from './components/Field';
-import useStyles from './styles.js';
+} from '@mui/icons-material'
+import LogoFieldClickable from './components/LogoFieldClickable'
+import GameAction from './components/GameAction'
+import LogoField from './components/LogoField'
+import Field from './components/Field'
+import Charts from './components/Charts'
+import useStyles from './styles.js'
 import SpringSVG from './assets/box-1.svg'
 import SummerSVG from './assets/box-2.svg'
 import AutumnSVG from './assets/box-3.svg'
@@ -59,7 +60,7 @@ function App() {
         </Grid>
         <Grid item xs={6}>
           <div className={classes.chart}>
-            Chart
+            <Charts />
           </div>
         </Grid>
       </Grid>
