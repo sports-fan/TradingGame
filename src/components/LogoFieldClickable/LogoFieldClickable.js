@@ -14,20 +14,17 @@ const useStyles = makeStyles({
     marginTop: '-5px',
     maxWidth: '150px',
     width: '150px',
-
-  },
-  img: {
-    click: {
-      borderColor: 'black'
-    }
   }
 })
 
-const LogoFieldClickable = ({onClick, value, img}) => {
+const LogoFieldClickable = ({onClick, className, value, img}) => {
   const classes = useStyles()
   return (
     <div className={classes.logo}>
-      <img className={classes.img} src={img} alt="logo" onClick={onClick}/>
+      {}
+      <div className={className}>
+        <img src={img} alt="logo" onClick={onClick}/>
+      </div>
       <div className={classes.typography}>
         <TextField
           disabled

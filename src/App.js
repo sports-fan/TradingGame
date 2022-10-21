@@ -1,3 +1,4 @@
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { Container, Grid, Typography, TextField, Button } from '@mui/material';
 import {
   PlayCircleOutline as StartIcon,
@@ -14,9 +15,77 @@ import SpringSVG from './assets/box-1.svg'
 import SummerSVG from './assets/box-2.svg'
 import AutumnSVG from './assets/box-3.svg'
 import WinterSVG from './assets/box-4.svg'
+import { formatDate, getForBalance } from './utils';
 
 function App() {
-  const classes = useStyles()
+    const classes = useStyles()
+    const metadata = useMemo(() => [
+      {
+        title: "Spring",
+        img: SpringSVG,
+        balance: 100,
+        relativePrice: 2
+      },
+      {
+        title: "Summer",
+        img: SummerSVG,
+        balance: 100,
+        relativePrice: 2.5
+      },
+      {
+        title: "Autumn",
+        img: AutumnSVG,
+        balance: 100,
+        relativePrice: 3
+      },
+      {
+        title: "Winter",
+        img: WinterSVG,
+        balance: 100,
+        relativePrice: 3.5
+      },
+    ], [])
+  const [selectedTradeId, setSelectedTradeId] = useState(null)
+  const [selectedForId, setSelectedForId] = useState(null)
+  const [balanceFor, setBalanceFor] = useState([0,0,0,0])
+  const [currentTime, setCurrentTime] = useState(formatDate(new Date(2021, 8, 5)))
+
+  useEffect(() => {
+    // setInterval()
+  })
+
+  const handleTradeClick = useCallback(id => {
+    setSelectedTradeId(id)
+  }, [setSelectedTradeId])
+
+  const handleForClick = useCallback(id => {
+    const balanceA = metadata[selectedTradeId].balance
+    const priceA = metadata[selectedTradeId].relativePrice
+    const priceB = metadata[id].relativePrice
+    const balanceB = getForBalance(balanceA, priceA, priceB)
+    switch(id) {
+      case 0:
+        setBalanceFor([balanceB, 0, 0, 0])
+        break
+      case 1:
+        setBalanceFor([0, balanceB, 0, 0])
+
+        break
+      case 2:
+        setBalanceFor([0, 0, balanceB, 0])
+
+        break
+      case 3:
+        setBalanceFor([0, 0, 0, balanceB])
+
+        break
+      default:
+        break
+    }
+    setSelectedForId(id)
+  }, [selectedTradeId, setSelectedForId, setBalanceFor, metadata])
+
+
   return (
     <Container className={classes.marginTop100}>
       <Grid container spacing={2}>
@@ -26,36 +95,26 @@ function App() {
               <Typography variant="h6" gutterBottom>
                 Your tokens
               </Typography>
-              <div>
-                <LogoField
-                  value="Spring Token"
-                  img={SpringSVG}
-                />
-                <LogoField
-                  value="Summer Token"
-                  img={SummerSVG}
-                />
-                <LogoField
-                  value="Autumn Token"
-                  img={AutumnSVG}
-                />
-                <LogoField
-                  value="Winter Token"
-                  img={WinterSVG}
-                />
-              </div>
             </Grid>
             <Grid item xs={6}>
               <Typography variant="h6" gutterBottom>
                 Relative prices
               </Typography>
-              <div>
-                <Field value="Spring price"/>
-                <Field value="Summer price"/>
-                <Field value="Autumn price"/>
-                <Field value="Winter price"/>
-              </div>
             </Grid>
+            {metadata.map((item, idx) => (
+              <>
+                <Grid item xs={6}>
+                  <LogoField
+                    key={idx}
+                    value={item.balance}
+                    img={item.img}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Field key={idx} value={item.relativePrice}/>
+                </Grid>
+              </>
+            ))}
           </Grid>
         </Grid>
         <Grid item xs={6}>
@@ -84,48 +143,34 @@ function App() {
               <Typography variant="h6" gutterBottom>
                 Trade
               </Typography>
-              <div>
-                <LogoFieldClickable
-                  value="Spring Token"
-                  img={SpringSVG}
-                />
-                <LogoFieldClickable
-                  value="Summer Token"
-                  img={SummerSVG}
-                />
-                <LogoFieldClickable
-                  value="Autumn Token"
-                  img={AutumnSVG}
-                />
-                <LogoFieldClickable
-                  value="Winter Token"
-                  img={WinterSVG}
-                />
-              </div>
             </Grid>
             <Grid item xs={6}>
               <Typography variant="h6" gutterBottom>
                 For
               </Typography>
-              <div>
-                <LogoFieldClickable
-                  value="Spring Token"
-                  img={SpringSVG}
-                />
-                <LogoFieldClickable
-                  value="Summer Token"
-                  img={SummerSVG}
-                />
-                <LogoFieldClickable
-                  value="Autumn Token"
-                  img={AutumnSVG}
-                />
-                <LogoFieldClickable
-                  value="Winter Token"
-                  img={WinterSVG}
-                />
-              </div>
             </Grid>
+            {metadata.map((item, idx) => (
+              <>
+                <Grid item xs={6}>
+                  <LogoFieldClickable
+                    key={idx}
+                    className={idx === selectedTradeId ? classes.img : null}
+                    value={item.balance}
+                    img={item.img}
+                    onClick={() => handleTradeClick(idx)}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <LogoFieldClickable
+                    key={idx}
+                    className={idx === selectedForId ? classes.img : null}
+                    value={balanceFor[idx]}
+                    img={item.img}
+                    onClick={() => handleForClick(idx)}
+                  />
+                </Grid>
+              </>
+            ))}
           </Grid>
         </Grid>
         <Grid item xs={3}>
@@ -138,7 +183,7 @@ function App() {
                 disabled
                 size='small'
                 variant='outlined'
-                value='date'
+                value={currentTime}
               />
             </div>
           </div>

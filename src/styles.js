@@ -22,5 +22,8 @@ export default makeStyles({
     border: 'solid',
     padding: 25,
     height: 120
+  },
+  img: {
+    border: 'solid'
   }
 })
