@@ -1,7 +1,7 @@
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 
-const Charts = () => {
+const Charts = ({spring, summer, autumn, winter}) => {
   const options = {
     chart: {
       type: 'spline'
@@ -11,7 +11,16 @@ const Charts = () => {
     },
     series: [
       {
-        data: [1, 2, 1, 4, 3, 6]
+        data: spring
+      },
+      {
+        data: summer
+      },
+      {
+        data: autumn
+      },
+      {
+        data: winter
       }
     ]
   }
