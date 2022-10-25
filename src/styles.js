@@ -1,6 +1,6 @@
 import { makeStyles } from '@mui/styles'
 
-export default makeStyles({
+export default makeStyles(theme => ({
   marginTop100: {
     marginTop: 100
   },
@@ -25,5 +25,8 @@ export default makeStyles({
   },
   img: {
     border: 'solid'
+  },
+  totalTokens: {
+    marginLeft: 20
   }
-})
+}))
