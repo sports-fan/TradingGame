@@ -2,7 +2,6 @@ import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 
 const Charts = ({spring, summer, autumn, winter}) => {
-  console.log(spring, '================Spring=============')
   const options = {
     chart: {
       type: 'spline'

@@ -10,6 +10,7 @@ import GameAction from './components/GameAction'
 import LogoField from './components/LogoField'
 import Field from './components/Field'
 import ChartsComp from './components/Charts'
+import TransitionModal from './components/Modal/Modal'
 import useStyles from './styles.js'
 import { getForBalance } from './utils';
 import { ICON_SVG, INITIAL_DATE, TOKEN_ARRAY, STATUS, A_DAY } from './constants'
@@ -27,6 +28,7 @@ const Charts = React.memo(ChartsComp, () => {
 
 function App() {
   const classes = useStyles()
+  const [open, setOpen] = useState(false)
   const [status, setStatus] = useState(STATUS.IDLE)
   const [springPriceArr, setSpringPriceArr] = useState([])
   const [summerPriceArr, setSummerPriceArr] = useState([])
@@ -65,8 +67,10 @@ function App() {
                currentDate === Date.parse('2027-09-04') ||
                currentDate === Date.parse('2030-09-04')) {
       setProductionRates(prev => ({ ...prev, winter: prev.winter / 2 }))
-    } else if (currentDate === Date.parse('2031-09-05')) {
+    } else if (currentDate === Date.parse('2031-09-15')) {
       clearInterval(timer.current)
+      setStatus(STATUS.IDLE)
+      setOpen(true)
     }
   }, [currentDate])
 
@@ -187,6 +191,10 @@ function App() {
       setSelectedTradeId(null)
     }
   }, [balanceFor, selectedForId, selectedTradeId, status])
+
+  const handleClose = useCallback(() => {
+    setOpen(false)
+  }, [])
 
   return (
     <Container className={classes.marginTop100}>
@@ -319,6 +327,12 @@ function App() {
           </div>
         </Grid>
       </Grid>
+      <TransitionModal
+        open={open}
+        onClose={handleClose}
+        total={totalBalance}
+        content={`Trading game ended. You earned ${totalBalance} tokens. Please click Restart game button to restart. Thank you`}
+      />
     </Container>
   );
 }
