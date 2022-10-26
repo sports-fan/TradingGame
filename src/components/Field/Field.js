@@ -3,11 +3,11 @@ import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles({
   typography: {
-    marginTop: '15px',
-    marginDown: '15px',
-    marginLeft: '10px',
-    marginRight: '10px',
-    width: '150px',
+    marginTop: 5,
+    marginBottom: 5,
+    marginLeft: 10,
+    marginRight: 10,
+    width: 150
   }
 })
 

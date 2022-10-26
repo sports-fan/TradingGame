@@ -1,7 +1,8 @@
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 
-const Charts = ({spring, summer, autumn, winter, currentYear}) => {
+const Charts = ({spring, summer, autumn, winter}) => {
+  console.log(spring, '================Spring=============')
   const options = {
     chart: {
       type: 'spline'
@@ -10,11 +11,13 @@ const Charts = ({spring, summer, autumn, winter, currentYear}) => {
       text: 'Relative Price Charts'
     },
     xAxis: {
-      categories: currentYear > 2022 ? [currentYear -2, currentYear-1, currentYear] : (currentYear > 2021 ? [currentYear-1, currentYear] : [currentYear]),
-      accessibility: {
-        rangeDescription: 'Range: 2021 to 2031',
-        description: 'Years'
-      }
+      categories: [''],
+      title: {
+          text: null
+      },
+      labels: {
+       enabled:false,//default is true
+       y : 20, rotation: -45, align: 'right' }
     },
     yAxis: {
       title: {
@@ -31,7 +34,7 @@ const Charts = ({spring, summer, autumn, winter, currentYear}) => {
       align: 'left',
       verticalAlign: 'top',
       x: 50,
-      y: 42,
+      y: -10,
       floating: true,
       borderWidth: 1,
       backgroundColor:
@@ -41,8 +44,7 @@ const Charts = ({spring, summer, autumn, winter, currentYear}) => {
       series: {
         label: {
           connectorAllowed: false
-        },
-        pointStart: 2021
+        }
       }
     },
     series: [

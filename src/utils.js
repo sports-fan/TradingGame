@@ -1,5 +1,5 @@
 export const getForBalance = (balanceA, priceA, priceB) => {
-  return balanceA * priceB / priceA 
+  return balanceA * priceA / priceB 
 }
 
 export const formatDate = date => {

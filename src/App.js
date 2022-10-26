@@ -11,13 +11,8 @@ import LogoField from './components/LogoField'
 import Field from './components/Field'
 import ChartsComp from './components/Charts'
 import useStyles from './styles.js'
-import SpringSVG from './assets/box-1.svg'
-import SummerSVG from './assets/box-2.svg'
-import AutumnSVG from './assets/box-3.svg'
-import WinterSVG from './assets/box-4.svg'
 import { getForBalance } from './utils';
-
-const A_DAY = 30 * 1000 / 365
+import { ICON_SVG, INITIAL_DATE, TOKEN_ARRAY, STATUS, A_DAY } from './constants'
 
 let prevRenderTime = Date.now()
 const Charts = React.memo(ChartsComp, () => {
@@ -30,57 +25,45 @@ const Charts = React.memo(ChartsComp, () => {
   }
 })
 
-const ICON_SVG = [
-  SpringSVG,
-  SummerSVG,
-  AutumnSVG,
-  WinterSVG,
-]
-const INITIAL_DATE = Date.parse('2021-09-05')
-const TOKEN = {
-  SPRING: 0,
-  SUMMER: 1,
-  AUTUMN: 2,
-  WINTER: 3
-}
-const TOKEN_ARRAY = ['SPRING', 'SUMMER', 'AUTUMN', 'WINTER']
-const STATUS = {
-  IDLE: 0,
-  ONGOING: 1
-}
-let prevDate = INITIAL_DATE
-
 function App() {
   const classes = useStyles()
   const [status, setStatus] = useState(STATUS.IDLE)
-  const [springPriceArr, setSpringPriceArr] = useState([5/((5+6+7+8)/4)])
-  const [summerPriceArr, setSummerPriceArr] = useState([6/((5+6+7+8)/4)])
-  const [autumnPriceArr, setAutumnPriceArr] = useState([7/((5+6+7+8)/4)])
-  const [winterPriceArr, setWinterPriceArr] = useState([8/((5+6+7+8)/4)])
+  const [springPriceArr, setSpringPriceArr] = useState([])
+  const [summerPriceArr, setSummerPriceArr] = useState([])
+  const [autumnPriceArr, setAutumnPriceArr] = useState([])
+  const [winterPriceArr, setWinterPriceArr] = useState([])
   const [selectedTradeId, setSelectedTradeId] = useState(null)
   const [selectedForId, setSelectedForId] = useState(null)
   const [balanceFor, setBalanceFor] = useState([0,0,0,0])
   const [balanceTrade, setBalanceTrade] = useState([0,0,0,0])
   const [currentDate, setCurrentDate] = useState(INITIAL_DATE)
   const [currentBalance, setCurrentBalance] = useState([100,100,100,100])
-  const [absolutePrices, setAbsolutePrices] = useState([2, 2.5, 3, 3.5])
+  const [absolutePrices, setAbsolutePrices] = useState([600/168, 600/140, 600/120, 600/105]) 
 
   const timer = useRef()
   const [productionRates, setProductionRates] = useState({
-    spring: 168,
-    summer: 140,
-    autumn: 120,
-    winter: 105
+    spring: 168/600,
+    summer: 140/600,
+    autumn: 120/600,
+    winter: 105/600
   })
 
   useEffect(() => {
-    if (currentDate === Date.parse('2022-06-05')) {
+    if (currentDate === Date.parse('2022-06-05') ||
+        currentDate === Date.parse('2025-06-05') ||
+        currentDate === Date.parse('2028-06-05')) {
       setProductionRates(prev => ({ ...prev, spring: prev.spring / 2 }))
-    } else if (currentDate === Date.parse('2025-06-05')) {
+    } else if (currentDate === Date.parse('2023-03-06') ||
+               currentDate === Date.parse('2026-03-06') ||
+               currentDate === Date.parse('2029-03-06') ) {
       setProductionRates(prev => ({ ...prev, summer: prev.summer / 2 }))
-    } else if (currentDate === Date.parse('2028-06-05')) {
+    } else if (currentDate === Date.parse('2023-12-05') ||
+               currentDate === Date.parse('2026-12-05') ||
+               currentDate === Date.parse('2029-12-05')) {
       setProductionRates(prev => ({ ...prev, autumn: prev.autumn / 2 }))
-    } else if (currentDate === Date.parse('2031-06-05')) {
+    } else if (currentDate === Date.parse('2024-09-04') ||
+               currentDate === Date.parse('2027-09-04') ||
+               currentDate === Date.parse('2030-09-04')) {
       setProductionRates(prev => ({ ...prev, winter: prev.winter / 2 }))
     } else if (currentDate === Date.parse('2031-09-05')) {
       clearInterval(timer.current)
@@ -93,84 +76,81 @@ function App() {
     }
     setAbsolutePrices(prev => {
       const ratesArr = Object.values(productionRates)
-      return prev.map((prevPrice, idx) => 0.99 * prevPrice  + 0.01 * (1 / ratesArr[idx]))
+      const result = prev.map((prevPrice, idx) => 0.99 * prevPrice  + 0.01 * (1 / ratesArr[idx]))
+      return result
     })
   }, [currentDate, productionRates])
-
-  useEffect(() => {
-    if (currentDate === INITIAL_DATE) {
-      return
-    }
-    const totalPrices = absolutePrices.reduce((total, price) => total + price, 0)
-    const updatedRelativePrices = absolutePrices.map((price) => {return price / totalPrices * 4})
-    const prevDateFullYear = new Date(prevDate).getFullYear()
-    const currDateFullYear = new Date(currentDate).getFullYear()
-    if (prevDateFullYear !== currDateFullYear) {
-      prevDate = currentDate
-      setSpringPriceArr(prev => prev.concat(updatedRelativePrices[0]))
-      setSummerPriceArr(prev => prev.concat(updatedRelativePrices[1]))
-      setAutumnPriceArr(prev => prev.concat(updatedRelativePrices[2]))
-      setWinterPriceArr(prev => prev.concat(updatedRelativePrices[3]))
-    }
-    setCurrentBalance(prev => ([
-      prev[0] + productionRates.spring * 144,
-      prev[1] + productionRates.summer * 144,
-      prev[2] + productionRates.winter * 144,
-      prev[3] + productionRates.autumn * 144
-    ]))
-  }, [currentDate, productionRates, absolutePrices])
 
   const relativePrices = useMemo(() => {
     const totalPrices = absolutePrices.reduce((total, price) => total + price, 0)
     const result = absolutePrices.map((price) => price / totalPrices * 4)
+    setSpringPriceArr(prev => {
+      const arr = prev
+      if (arr.length >= 365 * 3) {
+        arr.shift()
+        return arr.concat(result[0])
+      } else 
+        return arr.concat(result[0])
+    })
+    setSummerPriceArr(arr => {
+      if (arr.length >= 365 * 3) {
+        arr.shift()
+        return arr.concat(result[1])
+      } else 
+        return arr.concat(result[1])
+    })
+    setAutumnPriceArr(arr => {
+      if (arr.length >= 365 * 3) {
+        arr.shift()
+        return arr.concat(result[2])
+      } else 
+        return arr.concat(result[2])
+    })
+    setWinterPriceArr(arr => {
+      if (arr.length >= 365 * 3) {
+        arr.shift()
+        return arr.concat(result[3])
+      } else 
+        return arr.concat(result[3])
+    })
     return result
   }, [absolutePrices])
+
+  useEffect(() => {
+    if (selectedForId >= 0) {
+      let balanceB
+      if (selectedTradeId === selectedForId) {
+        balanceB = currentBalance[selectedForId]
+      } else {
+        const balanceA = currentBalance[selectedTradeId]
+        const priceA = relativePrices[selectedTradeId]
+        const priceB = relativePrices[selectedForId]
+        balanceB = getForBalance(balanceA, priceA, priceB)
+      }
+      setBalanceFor(() => {
+        const balance = [0,0,0,0]
+        balance[selectedForId] = balanceB
+        return balance
+      })
+    }
+  }, [selectedTradeId ,selectedForId, relativePrices, currentBalance])
 
   const totalBalance = currentBalance.reduce((total, bal) => total + bal, 0)
 
   const handleTradeClick = useCallback(id => {
-    switch(id) {
-      case TOKEN.SPRING:
-        setBalanceTrade([currentBalance[0], 0, 0, 0])
-        break
-      case TOKEN.SUMMER:
-        setBalanceTrade([0, currentBalance[1], 0, 0])
-        break
-      case TOKEN.AUTUMN:
-        setBalanceTrade([0, 0, currentBalance[2], 0])
-        break
-      case TOKEN.WINTER:
-        setBalanceTrade([0, 0, 0, currentBalance[3]])
-        break
-      default:
-        break
-    }
     setSelectedTradeId(id)
-  }, [setSelectedTradeId, currentBalance])
+    setBalanceTrade(() => {
+      const balance = [0,0,0,0]
+      balance[id] = currentBalance[id]
+      return balance
+    })
+  }, [currentBalance])
   
   const handleForClick = useCallback(id => {
-    const balanceA = currentBalance[selectedTradeId]
-    const priceA = relativePrices[selectedTradeId]
-    const priceB = relativePrices[id]
-    const balanceB = getForBalance(balanceA, priceA, priceB)
-    switch(id) {
-      case TOKEN.SPRING:
-        setBalanceFor([balanceB, 0, 0, 0])
-        break
-      case TOKEN.SUMMER:
-        setBalanceFor([0, balanceB, 0, 0])
-        break
-      case TOKEN.AUTUMN:
-        setBalanceFor([0, 0, balanceB, 0])
-        break
-      case TOKEN.WINTER:
-        setBalanceFor([0, 0, 0, balanceB])
-        break
-      default:
-        break
+    if (selectedTradeId !== null) {
+      setSelectedForId(id)
     }
-    setSelectedForId(id)
-  }, [selectedTradeId, currentBalance, relativePrices])
+  }, [selectedTradeId])
 
   const handleStart = useCallback(() => {
     setStatus(STATUS.ONGOING)
@@ -182,7 +162,7 @@ function App() {
     setStatus(STATUS.IDLE)
     setCurrentDate(INITIAL_DATE)
     setCurrentBalance([100,100,100,100])
-    setAbsolutePrices([2, 2.5, 3, 3.5])
+    setAbsolutePrices([600/168, 600/140, 600/120, 600/105])
     setBalanceFor([0,0,0,0])
     setBalanceTrade([0,0,0,0])
     setSelectedForId(null)
@@ -195,43 +175,18 @@ function App() {
 
   const handleExecute = useCallback(() => {
     if (status === STATUS.ONGOING) {
-      switch(selectedTradeId) {
-        case TOKEN.SPRING:
-          setCurrentBalance([currentBalance[selectedTradeId] - balanceTrade[selectedTradeId], currentBalance[1], currentBalance[2], currentBalance[3]])
-          break
-        case TOKEN.SUMMER:
-          setCurrentBalance([currentBalance[0], currentBalance[selectedTradeId] - balanceTrade[selectedTradeId], currentBalance[2], currentBalance[3]])
-          break
-        case TOKEN.AUTUMN:
-          setCurrentBalance([currentBalance[0], currentBalance[1], currentBalance[selectedTradeId] - balanceTrade[selectedTradeId], currentBalance[3]])
-          break
-        case TOKEN.WINTER:
-          setCurrentBalance([currentBalance[0], currentBalance[1], currentBalance[2], currentBalance[selectedTradeId] - balanceTrade[selectedTradeId]])
-          break
-        default:
-          break
-      }
-  
-      switch(selectedForId) {
-        case TOKEN.SPRING:
-          setCurrentBalance([currentBalance[selectedForId] + balanceFor[selectedForId], currentBalance[1], currentBalance[2], currentBalance[3]])
-          break
-        case TOKEN.SUMMER:
-          setCurrentBalance([currentBalance[0], currentBalance[selectedForId] + balanceFor[selectedForId], currentBalance[2], currentBalance[3]])
-          break
-        case TOKEN.AUTUMN:
-          setCurrentBalance([currentBalance[0], currentBalance[1], currentBalance[selectedForId] + balanceFor[selectedForId], currentBalance[3]])
-          break
-        case TOKEN.WINTER:
-          setCurrentBalance([currentBalance[0], currentBalance[1], currentBalance[2], currentBalance[selectedForId] + balanceFor[selectedForId]])
-          break
-        default:
-          break
-      }
+      setCurrentBalance(prevBalance => {
+        const balance = prevBalance
+        balance[selectedTradeId] = 0
+        balance[selectedForId] += balanceFor[selectedForId]
+        return balance
+      })
+      setBalanceTrade([0,0,0,0])
+      setBalanceFor([0,0,0,0])
       setSelectedForId(null)
       setSelectedTradeId(null)
     }
-  }, [currentBalance, balanceFor, balanceTrade, selectedForId, selectedTradeId, status])
+  }, [balanceFor, selectedForId, selectedTradeId, status])
 
   return (
     <Container className={classes.marginTop100}>
