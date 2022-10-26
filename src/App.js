@@ -13,6 +13,7 @@ import ChartsComp from './components/Charts'
 import TransitionModal from './components/Modal/Modal'
 import useStyles from './styles.js'
 import { getForBalance } from './utils';
+import SeasonalLogo from './assets/Seasonal-Tokens-Logo.png'
 import { ICON_SVG, INITIAL_DATE, TOKEN_ARRAY, STATUS, A_DAY } from './constants'
 
 let prevRenderTime = Date.now()
@@ -247,7 +248,10 @@ function App() {
             <Typography variant="h6" ml={4} gutterBottom>
               Total Tokens
             </Typography>
-            <Field value={totalBalance}/>
+            <div className={classes.totalTokens}>
+              <img className={classes.seasonalLogo} src={SeasonalLogo} alt='Seasonal Token'/>
+              <Field value={totalBalance}/>
+            </div>
           </div>
           <div>
             <GameAction comment="Start trading">

@@ -27,6 +27,10 @@ export default makeStyles(theme => ({
     border: 'solid'
   },
   totalTokens: {
-    marginLeft: 20
+    display:'flex'
+  },
+  seasonalLogo: {
+    width: 45,
+    height:  45
   }
 }))
