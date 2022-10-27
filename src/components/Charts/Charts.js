@@ -43,7 +43,10 @@ const Charts = ({spring, summer, autumn, winter}) => {
       series: {
         label: {
           connectorAllowed: false
-        }
+        },
+        marker: {
+          enabled: false
+        }  
       }
     },
     series: [

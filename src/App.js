@@ -130,7 +130,7 @@ function App() {
         const balanceA = currentBalance[selectedTradeId]
         const priceA = relativePrices[selectedTradeId]
         const priceB = relativePrices[selectedForId]
-        balanceB = getForBalance(balanceA, priceA, priceB)
+        balanceB = +getForBalance(balanceA, priceA, priceB).toFixed(2)
       }
       setBalanceFor(() => {
         const balance = [0,0,0,0]
@@ -146,7 +146,7 @@ function App() {
     setSelectedTradeId(id)
     setBalanceTrade(() => {
       const balance = [0,0,0,0]
-      balance[id] = currentBalance[id]
+      balance[id] = +currentBalance[id].toFixed(2)
       return balance
     })
   }, [currentBalance])
@@ -168,6 +168,12 @@ function App() {
     setCurrentDate(INITIAL_DATE)
     setCurrentBalance([100,100,100,100])
     setAbsolutePrices([600/168, 600/140, 600/120, 600/105])
+    setProductionRates({
+        spring: 168/600,
+        summer: 140/600,
+        autumn: 120/600,
+        winter: 105/600
+    })
     setBalanceFor([0,0,0,0])
     setBalanceTrade([0,0,0,0])
     setSelectedForId(null)
@@ -184,6 +190,7 @@ function App() {
         const balance = prevBalance
         balance[selectedTradeId] = 0
         balance[selectedForId] += balanceFor[selectedForId]
+        balanceFor[selectedForId] = 0
         return balance
       })
       setBalanceTrade([0,0,0,0])
@@ -218,12 +225,12 @@ function App() {
                   <Grid item xs={6}>
                     <LogoField
                       key={idx}
-                      value={currentBalance[idx]}
+                      value={currentBalance[idx].toFixed(2)}
                       img={item}
                     />
                   </Grid>
                   <Grid item xs={6}>
-                    <Field key={idx} value={relativePrices[idx]}/>
+                    <Field key={idx} value={relativePrices[idx].toFixed(5)}/>
                   </Grid>
                 </React.Fragment>
               ))}

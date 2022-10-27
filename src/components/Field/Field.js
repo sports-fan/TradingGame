@@ -5,9 +5,8 @@ const useStyles = makeStyles({
   typography: {
     marginTop: 5,
     marginBottom: 5,
-    marginLeft: 10,
-    marginRight: 10,
-    width: 150
+    width: 150,
+    height: 50
   }
 })
 

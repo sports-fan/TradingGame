@@ -8,7 +8,8 @@ const useStyles = makeStyles({
     alignItems: 'center',
     marginTop: 5,
     marginBottom: 5,
-    width: 210
+    width: 210,
+    height: 56
   },
   typography: {
     marginTop: '-5px',
@@ -21,7 +22,6 @@ const LogoFieldClickable = ({onClick, className, value, img}) => {
   const classes = useStyles()
   return (
     <div className={classes.logo}>
-      {}
       <div className={className}>
         <img src={img} alt="logo" onClick={onClick}/>
       </div>
