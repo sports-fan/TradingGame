@@ -14,6 +14,9 @@ export default makeStyles(theme => ({
   marginLeft20: {
     marginLeft: 20
   },
+  marginLeft15: {
+    marginLeft: 7
+  },
   executeBox: {
     display: 'flex',
     flexDirection: 'column',
@@ -27,10 +30,17 @@ export default makeStyles(theme => ({
     border: 'solid'
   },
   totalTokens: {
-    display:'flex'
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    height: 60
   },
   seasonalLogo: {
     width: 45,
     height:  45
+  },
+  totalField: {
+    marginTop: 10,
+    marginLeft: 7
   }
 }))
