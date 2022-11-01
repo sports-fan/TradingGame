@@ -68,7 +68,7 @@ function App() {
                currentDate === Date.parse('2027-09-04') ||
                currentDate === Date.parse('2030-09-04')) {
       setProductionRates(prev => ({ ...prev, winter: prev.winter / 2 }))
-    } else if (currentDate === Date.parse('2031-09-15')) {
+    } else if (currentDate === Date.parse('2031-09-05')) {
       clearInterval(timer.current)
       setStatus(STATUS.IDLE)
       setOpen(true)
@@ -216,7 +216,7 @@ function App() {
                 </Typography>
               </Grid>
               <Grid item xs={6}>
-                <Typography variant="h6" ml={2} gutterBottom>
+                <Typography variant="h6" ml={1} gutterBottom>
                   Relative prices
                 </Typography>
               </Grid>
