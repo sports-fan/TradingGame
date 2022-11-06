@@ -23,3 +23,6 @@ export const STATUS = {
 }
 
 export const A_DAY = 30 * 1000 / 365
+
+export const INITIAL_BALANCE = 1000
+

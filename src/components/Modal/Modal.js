@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 
-const ConfirmModal = ({ open, content, total, onClose}) => {
+const ConfirmModal = ({ open, content, onClose, children}) => {
   return (
     <div>
       <Dialog
@@ -18,6 +18,7 @@ const ConfirmModal = ({ open, content, total, onClose}) => {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             {content}
+            {children}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
