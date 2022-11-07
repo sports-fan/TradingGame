@@ -98,6 +98,12 @@ function App() {
     return result
   }, [absolutePrices])
 
+  const totalPrice = useMemo(() => 
+    currentBalance.reduce((total, balance, i) => {
+      return total + balance * relativePrices[i]
+    }, 0)
+  , [relativePrices, currentBalance])
+
   const totalBalance = currentBalance.reduce((total, bal) => total + bal, 0)
 
   const handleTradeClick = useCallback(id => {
@@ -172,8 +178,10 @@ function App() {
   }, [])
 
   const handleMode = useCallback((e, newMode) => {
-    handleRestart()
-    setMode(newMode)
+    if (newMode !== null) {
+      setMode(newMode)
+      handleRestart()
+    }
   }, [handleRestart])
   
   useEffect(() => {
@@ -305,6 +313,7 @@ function App() {
             <Typography variant="h6" ml={9} gutterBottom>
               Total Tokens
             </Typography>
+            <Typography variant='body1' ml={9}>{totalPrice.toFixed(5)} $</Typography> 
             <div className={classes.totalTokens}>
               <img className={classes.seasonalLogo} src={SeasonalLogo} alt='Seasonal Token'/>
               <div className={classes.totalField}>
