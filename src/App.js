@@ -231,8 +231,8 @@ function App() {
                 </Typography>
               </Grid>
               <Grid item xs={6}>
-                <Typography variant="h6" ml={1} gutterBottom>
-                  Relative prices
+                <Typography variant="h6" ml={5} gutterBottom>
+                  Prices
                 </Typography>
               </Grid>
               {ICON_SVG.map((item, idx) => (
@@ -245,7 +245,14 @@ function App() {
                     />
                   </Grid>
                   <Grid item xs={6}>
-                    <Field key={idx} value={relativePrices[idx].toFixed(5)}/>
+                    <Grid container>
+                      <Grid item xs={4}>
+                        <Field key={idx} value={relativePrices[idx].toFixed(5)}/>
+                      </Grid>
+                      <Grid itme xs={8}>
+                        <Field key={idx} value='cents'/>
+                      </Grid>
+                    </Grid>
                   </Grid>
                 </React.Fragment>
               ))}
@@ -267,7 +274,7 @@ function App() {
       <Grid container spacing={{ xs: 2 }} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent='center' alignItems="center">
         <Grid item xs={3}>
           <div className={classes.marginLeft15}>
-            <Typography variant="h6" ml={4} gutterBottom>
+            <Typography variant="h6" ml={9} gutterBottom>
               Total Tokens
             </Typography>
             <div className={classes.totalTokens}>

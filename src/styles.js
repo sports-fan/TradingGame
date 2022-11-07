@@ -41,6 +41,6 @@ export default makeStyles(theme => ({
   },
   totalField: {
     marginTop: 10,
-    marginLeft: 7
+    marginLeft: 15
   }
 }))
