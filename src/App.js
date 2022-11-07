@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
-import { Container, Grid, Typography, TextField, Button, IconButton } from '@mui/material';
+import { Container, Grid, Typography, Button, IconButton } from '@mui/material';
 import {
   PlayCircleOutline as StartIcon,
   StopCircleOutlined as StopIcon,
@@ -337,12 +337,12 @@ function App() {
               Date
             </Typography>
             <div className={classes.marginLeft20}>
-              <TextField
-                disabled
-                size='small'
-                variant='outlined'
-                value={new Date(currentDate).toISOString().slice(0, 10)}
-              />
+              <Typography
+                gutterBottom
+                variant='body1'
+              >
+                {new Date(currentDate).toISOString().slice(0, 10)}
+              </Typography>
             </div>
           </div>
           <div className={classes.executeBox}>
