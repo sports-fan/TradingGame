@@ -1,8 +1,8 @@
 import { makeStyles } from '@mui/styles'
 
 export default makeStyles(theme => ({
-  marginTop100: {
-    marginTop: 100
+  container: {
+    marginTop: 30
   },
   display: {
     display: 'flex',
@@ -42,5 +42,10 @@ export default makeStyles(theme => ({
   totalField: {
     marginTop: 10,
     marginLeft: 15
+  },
+  modebtn: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    marginBottom: 30
   }
 }))

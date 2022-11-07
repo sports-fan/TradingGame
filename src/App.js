@@ -12,9 +12,10 @@ import Field from './components/Field'
 import ChartsComp from './components/Charts'
 import TransitionModal from './components/Modal/Modal'
 import useStyles from './styles.js'
-import { getForBalance } from './utils';
+import ModeSwtiching from './components/ModeSwtiching';
+import { getForBalance, getNormallyDistributedRandomNumber } from './utils';
 import SeasonalLogo from './assets/Seasonal-Tokens-Logo.png'
-import { ICON_SVG, INITIAL_DATE, TOKEN_ARRAY, STATUS, A_DAY, INITIAL_BALANCE } from './constants'
+import { ICON_SVG, INITIAL_DATE, TOKEN_ARRAY, STATUS, A_DAY, INITIAL_BALANCE, MODE } from './constants'
 
 let prevRenderTime = Date.now()
 const Charts = React.memo(ChartsComp, () => {
@@ -30,6 +31,7 @@ const Charts = React.memo(ChartsComp, () => {
 function App() {
   const timer = useRef()
   const classes = useStyles()
+  const [mode, setMode] = useState(MODE.BEGINNER)
   const [openStart, setOpenStart] = useState(false)
   const [openEnd, setOpenEnd] = useState(false)
   const [status, setStatus] = useState(STATUS.IDLE)
@@ -60,8 +62,8 @@ function App() {
     autumn: 120/600,
     winter: 105/600
   })
-
   const relativePrices = useMemo(() => {
+    console.log({absolutePrices})
     const totalPrices = absolutePrices.reduce((total, price) => total + price, 0)
     const result = absolutePrices.map((price) => price / totalPrices * 4)
     setSpringPriceArr(prev => {
@@ -96,61 +98,6 @@ function App() {
     return result
   }, [absolutePrices])
 
-  useEffect(() => {
-    if (currentDate === Date.parse('2022-06-05') ||
-        currentDate === Date.parse('2025-06-05') ||
-        currentDate === Date.parse('2028-06-05')) {
-      setProductionRates(prev => ({ ...prev, spring: prev.spring / 2 }))
-    } else if (currentDate === Date.parse('2023-03-06') ||
-               currentDate === Date.parse('2026-03-06') ||
-               currentDate === Date.parse('2029-03-06') ) {
-      setProductionRates(prev => ({ ...prev, summer: prev.summer / 2 }))
-    } else if (currentDate === Date.parse('2023-12-05') ||
-               currentDate === Date.parse('2026-12-05') ||
-               currentDate === Date.parse('2029-12-05')) {
-      setProductionRates(prev => ({ ...prev, autumn: prev.autumn / 2 }))
-    } else if (currentDate === Date.parse('2024-09-04') ||
-               currentDate === Date.parse('2027-09-04') ||
-               currentDate === Date.parse('2030-09-04')) {
-      setProductionRates(prev => ({ ...prev, winter: prev.winter / 2 }))
-    } else if (currentDate === Date.parse('2031-09-05')) {
-      clearInterval(timer.current)
-      setStatus(STATUS.IDLE)
-      setOpenEnd(true)
-    }
-  }, [currentDate])
-
-  useEffect(() => {
-    if (currentDate === INITIAL_DATE) {
-      setOpenStart(true)
-      return
-    }
-    setAbsolutePrices(prev => {
-      const ratesArr = Object.values(productionRates)
-      const result = prev.map((prevPrice, idx) => 0.99 * prevPrice  + 0.01 * (1 / ratesArr[idx]))
-      return result
-    })
-  }, [currentDate, productionRates])
-
-  useEffect(() => {
-    if (selectedForId >= 0) {
-      let balanceB
-      if (selectedTradeId === selectedForId) {
-        balanceB = currentBalance[selectedForId]
-      } else {
-        const balanceA = currentBalance[selectedTradeId]
-        const priceA = relativePrices[selectedTradeId]
-        const priceB = relativePrices[selectedForId]
-        balanceB = +getForBalance(balanceA, priceA, priceB).toFixed(2)
-      }
-      setBalanceFor(() => {
-        const balance = [0,0,0,0]
-        balance[selectedForId] = balanceB
-        return balance
-      })
-    }
-  }, [selectedTradeId ,selectedForId, relativePrices, currentBalance])
-
   const totalBalance = currentBalance.reduce((total, bal) => total + bal, 0)
 
   const handleTradeClick = useCallback(id => {
@@ -177,7 +124,12 @@ function App() {
     timer.current && clearInterval(timer.current)
     setStatus(STATUS.IDLE)
     setCurrentDate(INITIAL_DATE)
-    setCurrentBalance([100,100,100,100])
+    setCurrentBalance([
+      INITIAL_BALANCE,
+      INITIAL_BALANCE,
+      INITIAL_BALANCE,
+      INITIAL_BALANCE
+    ])
     setAbsolutePrices([600/168, 600/140, 600/120, 600/105])
     setProductionRates({
         spring: 168/600,
@@ -219,8 +171,84 @@ function App() {
     setOpenStart(false)
   }, [])
 
+  const handleMode = useCallback((e, newMode) => {
+    handleRestart()
+    setMode(newMode)
+  }, [handleRestart])
+  
+  useEffect(() => {
+    if (currentDate === Date.parse('2022-06-05') ||
+        currentDate === Date.parse('2025-06-05') ||
+        currentDate === Date.parse('2028-06-05')) {
+      setProductionRates(prev => ({ ...prev, spring: prev.spring / 2 }))
+    } else if (currentDate === Date.parse('2023-03-06') ||
+               currentDate === Date.parse('2026-03-06') ||
+               currentDate === Date.parse('2029-03-06') ) {
+      setProductionRates(prev => ({ ...prev, summer: prev.summer / 2 }))
+    } else if (currentDate === Date.parse('2023-12-05') ||
+               currentDate === Date.parse('2026-12-05') ||
+               currentDate === Date.parse('2029-12-05')) {
+      setProductionRates(prev => ({ ...prev, autumn: prev.autumn / 2 }))
+    } else if (currentDate === Date.parse('2024-09-04') ||
+               currentDate === Date.parse('2027-09-04') ||
+               currentDate === Date.parse('2030-09-04')) {
+      setProductionRates(prev => ({ ...prev, winter: prev.winter / 2 }))
+    } else if (currentDate === Date.parse('2031-09-05')) {
+      clearInterval(timer.current)
+      setStatus(STATUS.IDLE)
+      setOpenEnd(true)
+    }
+  }, [currentDate])
+
+  useEffect(() => {
+    if (currentDate === INITIAL_DATE) {
+      setOpenStart(true)
+      return
+    }
+    setAbsolutePrices(prev => {
+      const ratesArr = Object.values(productionRates)
+      let result
+      switch(mode) {
+        case MODE.BEGINNER:
+          result = prev.map((prevPrice, idx) => 0.99 * prevPrice  + 0.01 * (1 / ratesArr[idx]))
+          break
+        case MODE.ADVANCED:
+          result = prev.map((prevPrice, idx) => 0.99 * prevPrice  + 0.01 * (1 / ratesArr[idx]) + getNormallyDistributedRandomNumber(0, 0.00002))
+          break
+        default:
+          break
+      }
+      return result
+    })
+  }, [currentDate, productionRates, mode])
+
+  useEffect(() => {
+    if (selectedForId >= 0) {
+      let balanceB
+      if (selectedTradeId === selectedForId) {
+        balanceB = currentBalance[selectedForId]
+      } else {
+        const balanceA = currentBalance[selectedTradeId]
+        const priceA = relativePrices[selectedTradeId]
+        const priceB = relativePrices[selectedForId]
+        balanceB = +getForBalance(balanceA, priceA, priceB).toFixed(2)
+      }
+      setBalanceFor(() => {
+        const balance = [0,0,0,0]
+        balance[selectedForId] = balanceB
+        return balance
+      })
+    }
+  }, [selectedTradeId ,selectedForId, relativePrices, currentBalance])
+
   return (
-    <Container className={classes.marginTop100}>
+    <Container className={classes.container}>
+      <div className={classes.modebtn}>
+        <ModeSwtiching
+          value={mode}
+          onChange={handleMode}
+        />
+      </div>
       <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent='center' alignItems="center">
         <Grid item xs={6}>
           <div>
@@ -249,7 +277,7 @@ function App() {
                       <Grid item xs={4}>
                         <Field key={idx} value={relativePrices[idx].toFixed(5)}/>
                       </Grid>
-                      <Grid itme xs={8}>
+                      <Grid item xs={8}>
                         <Field key={idx} value='cents'/>
                       </Grid>
                     </Grid>
@@ -372,9 +400,18 @@ function App() {
         onClose={handleCloseStart}
       >
         <Typography>
-          <b>The Scenario:</b><br/>
-          You have ten years to achieve financial security. You can afford to buy 1000 Seasonal Tokens of each type. Now your task is to get as many tokens as you can in the next ten years. You have a rule to guide you: Trade tokens for more tokens.<br/><br/>
-          <b>How to Play:</b><br/>
+          <b>The Scenario:</b>
+        </Typography>
+        <br/>
+        <Typography>
+          You have ten years to achieve financial security. You can afford to buy 1000 Seasonal Tokens of each type. Now your task is to get as many tokens as you can in the next ten years. You have a rule to guide you: Trade tokens for more tokens.
+        </Typography>
+        <br/>
+        <Typography>
+          <b>How to Play:</b>
+        </Typography>
+        <br/>
+        <Typography>
           1. Start trading (with an arrow pointing to the Start Trading button)<br/>
           2. Select the token you want to trade (with an arrow pointing to the logos in the Trade column)<br/>
           3. Select the token you want to trade it for (with an arrow pointing to the logos in the For column)<br/>

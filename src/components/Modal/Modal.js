@@ -3,7 +3,6 @@ import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
-import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 
 const ConfirmModal = ({ open, content, onClose, children}) => {
@@ -16,10 +15,8 @@ const ConfirmModal = ({ open, content, onClose, children}) => {
         aria-describedby="alert-dialog-description">
         <DialogTitle id="alert-dialog-title">Confirmation</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {content}
-            {children}
-          </DialogContentText>
+          {content}
+          {children}
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose} color="secondary">
