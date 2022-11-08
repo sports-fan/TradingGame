@@ -43,9 +43,18 @@ export default makeStyles(theme => ({
     marginTop: 10,
     marginLeft: 15
   },
+  totalValue: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginRight: 25
+  },
   modebtn: {
     display: 'flex',
     justifyContent: 'flex-end',
     marginBottom: 30
+  },
+  flex: {
+    display: 'flex',
   }
 }))

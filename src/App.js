@@ -63,7 +63,6 @@ function App() {
     winter: 105/600
   })
   const relativePrices = useMemo(() => {
-    console.log({absolutePrices})
     const totalPrices = absolutePrices.reduce((total, price) => total + price, 0)
     const result = absolutePrices.map((price) => price / totalPrices * 4)
     setSpringPriceArr(prev => {
@@ -71,27 +70,38 @@ function App() {
       if (arr.length >= 365 * 3) {
         arr.shift()
         return arr.concat(result[0])
-      } else 
+      } else if (arr.length === 0) {
+        return arr.concat(result[0]).concat(result[0])
+      } else
         return arr.concat(result[0])
     })
-    setSummerPriceArr(arr => {
+    setSummerPriceArr(prev => {
+      const arr = prev
       if (arr.length >= 365 * 3) {
         arr.shift()
         return arr.concat(result[1])
+      } else if (arr.length === 0) {
+        return arr.concat(result[1]).concat(result[1]) 
       } else 
         return arr.concat(result[1])
     })
-    setAutumnPriceArr(arr => {
+    setAutumnPriceArr(prev => {
+      const arr = prev
       if (arr.length >= 365 * 3) {
         arr.shift()
         return arr.concat(result[2])
+      } else if (arr.length === 0) {
+        return arr.concat(result[2]).concat(result[2])  
       } else 
         return arr.concat(result[2])
     })
-    setWinterPriceArr(arr => {
+    setWinterPriceArr(prev => {
+      const arr = prev
       if (arr.length >= 365 * 3) {
         arr.shift()
         return arr.concat(result[3])
+      } else if (arr.length === 0) {
+        return arr.concat(result[3]).concat(result[3])
       } else 
         return arr.concat(result[3])
     })
@@ -100,7 +110,7 @@ function App() {
 
   const totalPrice = useMemo(() => 
     currentBalance.reduce((total, balance, i) => {
-      return total + balance * relativePrices[i]
+      return total + balance * relativePrices[i] / 100
     }, 0)
   , [relativePrices, currentBalance])
 
@@ -209,8 +219,10 @@ function App() {
   }, [currentDate])
 
   useEffect(() => {
-    if (currentDate === INITIAL_DATE) {
+    if (currentDate === INITIAL_DATE && !localStorage.getItem("isUserLoggedIn")) {
       setOpenStart(true)
+      localStorage.setItem("isUserLoggedIn", true)
+    } else if (currentDate === INITIAL_DATE) {
       return
     }
     setAbsolutePrices(prev => {
@@ -221,7 +233,7 @@ function App() {
           result = prev.map((prevPrice, idx) => 0.99 * prevPrice  + 0.01 * (1 / ratesArr[idx]))
           break
         case MODE.ADVANCED:
-          result = prev.map((prevPrice, idx) => 0.99 * prevPrice  + 0.01 * (1 / ratesArr[idx]) + getNormallyDistributedRandomNumber(0, 0.00002))
+          result = prev.map((prevPrice, idx) => 0.99 * prevPrice  + 0.01 * (1 / ratesArr[idx]) + getNormallyDistributedRandomNumber(0, 0.02))
           break
         default:
           break
@@ -262,12 +274,12 @@ function App() {
           <div>
             <Grid container justifyContent='center' alignItems="center">
               <Grid item xs={6}>
-                <Typography variant="h6" ml={10} gutterBottom>
+                <Typography variant="h6" ml={10}>
                   Your tokens
                 </Typography>
               </Grid>
               <Grid item xs={6}>
-                <Typography variant="h6" ml={5} gutterBottom>
+                <Typography variant="h6" ml={5}>
                   Prices
                 </Typography>
               </Grid>
@@ -302,7 +314,6 @@ function App() {
               summer={summerPriceArr}
               autumn={autumnPriceArr}
               winter={winterPriceArr}
-              currentYear={new Date(currentDate).getFullYear()}
             />
           </div>
         </Grid>
@@ -310,15 +321,16 @@ function App() {
       <Grid container spacing={{ xs: 2 }} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent='center' alignItems="center">
         <Grid item xs={3}>
           <div className={classes.marginLeft15}>
-            <Typography variant="h6" ml={9} gutterBottom>
-              Total Tokens
-            </Typography>
-            <Typography variant='body1' ml={9}>{totalPrice.toFixed(5)} $</Typography> 
+            <Typography variant="h6" ml={9}>Total Tokens</Typography>
             <div className={classes.totalTokens}>
               <img className={classes.seasonalLogo} src={SeasonalLogo} alt='Seasonal Token'/>
               <div className={classes.totalField}>
                 <Field value={totalBalance}/>
               </div>
+            </div>
+            <div className={classes.totalValue}>
+              <Typography variant="h6">Total value</Typography>
+              <Typography variant='body1' mt={2}>${totalPrice.toFixed(2)}</Typography> 
             </div>
           </div>
           <div>
@@ -342,12 +354,12 @@ function App() {
         <Grid item xs={6}>
           <Grid container>
             <Grid item xs={6}>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant="h6">
                 Trade
               </Typography>
             </Grid>
             <Grid item xs={6}>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant="h6">
                 For
               </Typography>
             </Grid>
@@ -377,12 +389,12 @@ function App() {
         </Grid>
         <Grid item xs={3}>
           <div className={classes.display}>
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h6">
               Date
             </Typography>
             <div className={classes.marginLeft20}>
               <Typography
-                gutterBottom
+              
                 variant='body1'
               >
                 {new Date(currentDate).toISOString().slice(0, 10)}
@@ -391,7 +403,7 @@ function App() {
           </div>
           <div className={classes.executeBox}>
             <div className={classes.padding15}>
-              <Typography variant="p" gutterBottom>
+              <Typography variant="p">
                 Trade {balanceTrade[selectedTradeId] || 0} {TOKEN_ARRAY[selectedTradeId]} tokens for {balanceFor[selectedForId] || 0} {TOKEN_ARRAY[selectedForId]} tokens
               </Typography>
             </div>
@@ -420,12 +432,19 @@ function App() {
           <b>How to Play:</b>
         </Typography>
         <br/>
-        <Typography>
-          1. Start trading (with an arrow pointing to the Start Trading button)<br/>
-          2. Select the token you want to trade (with an arrow pointing to the logos in the Trade column)<br/>
-          3. Select the token you want to trade it for (with an arrow pointing to the logos in the For column)<br/>
-          4. Execute the trade (with an arrow pointing to the Execute Trade button)<br/>
-        </Typography>
+        <div className={classes.flex}>
+          <Typography mr={2}> 1. Start trading </Typography>
+          <StartIcon/>
+        </div>
+        <div className={classes.flex}>
+          <Typography mr={2}> 2. Select the token you want to trade:  </Typography>
+          <img width='25' src={ICON_SVG[0]} alt='spring'/>
+        </div>
+        <div className={classes.flex}>
+          <Typography mr={2}> 3. Select the token you want to trade it for: </Typography>
+          <img width='25' src={ICON_SVG[1]} alt='summer'/>
+        </div>
+        <Typography> 4. Execute the trade </Typography>
       </TransitionModal>
     </Container>
   );
