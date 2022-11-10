@@ -22,4 +22,12 @@ export const STATUS = {
   ONGOING: 1
 }
 
+export const MODE = {
+  BEGINNER: 0,
+  ADVANCED: 1
+}
+
 export const A_DAY = 30 * 1000 / 365
+
+export const INITIAL_BALANCE = 1000
+

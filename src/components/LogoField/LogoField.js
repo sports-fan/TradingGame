@@ -1,4 +1,4 @@
-import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import { makeStyles } from "@mui/styles"
 
 const useStyles = makeStyles({
@@ -10,8 +10,7 @@ const useStyles = makeStyles({
     marginBottom: 5,
     width: 210
   },
-  typography: {
-    marginTop: '-5px',
+  container: {
     maxWidth: '150px',
     width: '150px',
 
@@ -23,13 +22,14 @@ const LogoField = ({value, img}) => {
   return (
     <div className={classes.logo}>
       <img src={img} alt="logo"/>
-      <div className={classes.typography}>
-        <TextField
-          disabled
-          size='small'
-          variant='outlined'
-          value={value}
-        />
+      <div className={classes.container}>
+        <Typography
+          variant="body1"
+          ml={6}
+          gutterBottom
+        >
+          {value}        
+        </Typography>
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import { makeStyles } from "@mui/styles"
 
 const useStyles = makeStyles({
@@ -26,12 +26,13 @@ const LogoFieldClickable = ({onClick, className, value, img}) => {
         <img src={img} alt="logo" onClick={onClick}/>
       </div>
       <div className={classes.typography}>
-        <TextField
-          disabled
-          size='small'
-          variant='outlined'
-          value={value}
-        />
+        <Typography
+          variant="body1"
+          ml={5}
+          gutterBottom
+        >
+          {value}        
+        </Typography>
       </div>
     </div>
   )
