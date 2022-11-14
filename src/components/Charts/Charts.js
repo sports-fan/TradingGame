@@ -15,7 +15,8 @@ const Charts = ({spring, summer, autumn, winter}) => {
       type: 'spline'
     },
     title: {
-      text: 'Relative Price Charts'
+      text: 'Relative Price Charts',
+      x: 30,
     },
     xAxis: {
       categories: [''],

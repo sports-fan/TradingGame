@@ -219,10 +219,18 @@ function App() {
   }, [currentDate])
 
   useEffect(() => {
-    if (currentDate === INITIAL_DATE && !localStorage.getItem("isUserLoggedIn")) {
+    const loggedStatus = localStorage.getItem("isUserLoggedIn")
+    if (loggedStatus === null) {
       setOpenStart(true)
       localStorage.setItem("isUserLoggedIn", true)
-    } else if (currentDate === INITIAL_DATE) {
+    }
+    return () => {
+      localStorage.removeItem("isUserLoggedIn")
+    }
+  }, [])
+
+  useEffect(() => {
+    if (currentDate === INITIAL_DATE) {
       return
     }
     setAbsolutePrices(prev => {

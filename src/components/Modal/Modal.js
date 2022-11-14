@@ -13,7 +13,7 @@ const ConfirmModal = ({ open, content, onClose, children}) => {
         onClose={onClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description">
-        <DialogTitle id="alert-dialog-title">Confirmation</DialogTitle>
+        <DialogTitle id="alert-dialog-title">Seasonal Tokens Trading Simulator</DialogTitle>
         <DialogContent>
           {content}
           {children}
