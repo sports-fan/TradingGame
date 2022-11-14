@@ -327,12 +327,10 @@ function App() {
               <img className={classes.seasonalLogo} src={SeasonalLogo} alt='Seasonal Token'/>
               <Typography variant='body1' ml={1}>{totalBalance.toFixed(2)}</Typography> 
             </div>
-            <div className={classes.totalValue}>
-              <Typography variant="h6">Total value</Typography>
-              <Typography variant='body1' mt={2}>${totalPrice.toFixed(2)}</Typography> 
-            </div>
+            <Typography variant="h6" mt={1}>Total value</Typography>
+            <Typography variant='body1' mt={1}>${totalPrice.toFixed(2)}</Typography> 
           </div>
-          <div>
+          <div className={classes.actions}>
             <GameAction comment="Start trading">
               <IconButton color='inherit' onClick={handleStart}>
                 <StartIcon fontSize='large'/>
@@ -351,7 +349,7 @@ function App() {
           </div>
         </Grid>
         <Grid item xs={6}>
-          <Grid container>
+          <Grid container className={classes.tradefor}>
             <Grid item xs={6}>
               <Typography variant="h6">
                 Trade
@@ -367,7 +365,7 @@ function App() {
                 <Grid item xs={6}>
                   <LogoFieldClickable
                     key={idx}
-                    className={idx === selectedTradeId ? classes.img : null}
+                    classClicked={idx === selectedTradeId ? classes.img : null}
                     value={balanceTrade[idx]}
                     img={item}
                     onClick={() => handleTradeClick(idx)}
@@ -376,7 +374,7 @@ function App() {
                 <Grid item xs={6}>
                   <LogoFieldClickable
                     key={idx}
-                    className={idx === selectedForId ? classes.img : null}
+                    classClicked={idx === selectedForId ? classes.img : null}
                     value={balanceFor[idx]}
                     img={item}
                     onClick={() => handleForClick(idx)}
@@ -387,13 +385,12 @@ function App() {
           </Grid>
         </Grid>
         <Grid item xs={3}>
-          <div className={classes.display}>
+          <div className={classes.date}>
             <Typography variant="h6">
               Date
             </Typography>
             <div className={classes.marginLeft20}>
               <Typography
-              
                 variant='body1'
               >
                 {new Date(currentDate).toISOString().slice(0, 10)}

@@ -4,9 +4,10 @@ export default makeStyles(theme => ({
   container: {
     marginTop: 30
   },
-  display: {
+  date: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+
   },
   marginTop30: {
     marginTop: 30
@@ -24,7 +25,8 @@ export default makeStyles(theme => ({
     height: 120
   },
   img: {
-    border: 'solid'
+    backgroundColor: '#EEEEEE',
+    borderRadius: 7
   },
   total: {
     display: 'flex',
@@ -59,5 +61,13 @@ export default makeStyles(theme => ({
   hr: {
     marginBottom: '2em',
     color: '#CCCCCC'
+  },
+  actions: {
+    margin: '1em'
+  },
+  tradefor: {
+    marginBottom: '1em',
+    paddingLeft: '2em',
+    paddingRight: '2em'
   }
 }))

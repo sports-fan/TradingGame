@@ -5,8 +5,8 @@ const useStyles = makeStyles({
   actions: {
     display: 'flex',
     alignItems: 'center',
-    marginTop: '20px',
-    marginBottom: '20px'
+    marginTop: '0px',
+    marginBottom: '10px'
   }
 })
 
@@ -15,7 +15,7 @@ const GameAction = ({children, comment}) => {
   return (
     <div className={classes.actions}>
       {children}
-      <Typography variant='h6' ml={2}>{comment}</Typography>
+      <Typography variant='h6' ml={1}>{comment}</Typography>
     </div>
   )
 }
