@@ -56,5 +56,9 @@ export default makeStyles(theme => ({
   },
   flex: {
     display: 'flex',
+  },
+  hr: {
+    marginBottom: '2em',
+    color: '#CCCCCC'
   }
 }))

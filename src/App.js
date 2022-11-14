@@ -271,41 +271,42 @@ function App() {
       </div>
       <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent='center' alignItems="center">
         <Grid item xs={6}>
-          <div>
-            <Grid container justifyContent='center' alignItems="center">
-              <Grid item xs={6}>
-                <Typography variant="h6" ml={10}>
-                  Your tokens
-                </Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant="h6" ml={5}>
-                  Prices
-                </Typography>
-              </Grid>
-              {ICON_SVG.map((item, idx) => (
-                <React.Fragment key={idx}>
-                  <Grid item xs={6}>
-                    <LogoField
-                      key={idx}
-                      value={currentBalance[idx].toFixed(2)}
-                      img={item}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Grid container>
-                      <Grid item xs={4}>
-                        <Field key={idx} value={relativePrices[idx].toFixed(5)}/>
-                      </Grid>
-                      <Grid item xs={8}>
-                        <Field key={idx} value='cents'/>
-                      </Grid>
+          <Grid container>
+            <Grid item xs={6}>
+              <Typography variant="h6" ml={10}>
+                Your tokens
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography variant="h6" ml={5}>
+                Prices
+              </Typography>
+            </Grid>
+          </Grid>
+          <hr className={classes.hr} />
+          <Grid container>
+            {ICON_SVG.map((item, idx) => (
+              <React.Fragment key={idx}>
+                <Grid item xs={6}>
+                  <LogoField
+                    key={idx}
+                    value={currentBalance[idx].toFixed(2)}
+                    img={item}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Grid container>
+                    <Grid item xs={4}>
+                      <Field key={idx} value={relativePrices[idx].toFixed(5)}/>
+                    </Grid>
+                    <Grid item xs={8}>
+                      <Field key={idx} value='cents'/>
                     </Grid>
                   </Grid>
-                </React.Fragment>
-              ))}
-            </Grid>
-          </div>
+                </Grid>
+              </React.Fragment>
+            ))}
+          </Grid>
         </Grid>
         <Grid item xs={6}>
           <div>
