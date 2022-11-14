@@ -19,8 +19,9 @@ export default makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    marginTop: 30,
-    border: 'solid',
+    borderRadius: 7,
+    backgroundColor: '#f6f6f6',
+    marginTop: 5,
     padding: 25,
     height: 120
   },

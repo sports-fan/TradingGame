@@ -319,7 +319,7 @@ function App() {
           </div>
         </Grid>
       </Grid>
-      <Grid container spacing={{ xs: 2 }} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent='center' alignItems="center">
+      <Grid container spacing={{ xs: 2 }} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent='center' alignItems="top">
         <Grid item xs={3}>
           <div className={classes.total}>
             <Typography variant="h6">Total Tokens</Typography>

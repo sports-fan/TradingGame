@@ -1,7 +1,15 @@
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
+import { makeStyles } from '@mui/styles'
+
+const useStyles = makeStyles({
+  chart: {
+    marginBottom: '2em'
+  }
+})
 
 const Charts = ({spring, summer, autumn, winter}) => {
+  const classes = useStyles()
   const options = {
     chart: {
       type: 'spline'
@@ -29,11 +37,11 @@ const Charts = ({spring, summer, autumn, winter}) => {
       }
     },
     legend: {
-      layout: 'vertical',
-      align: 'left',
-      verticalAlign: 'top',
-      x: 50,
-      y: -10,
+      layout: 'horizontal',
+      align: 'center',
+      verticalAlign: 'bottom',
+      x: 30,
+      y: -5,
       floating: true,
       borderWidth: 1,
       backgroundColor:
@@ -88,7 +96,7 @@ const Charts = ({spring, summer, autumn, winter}) => {
   }
 
   return (
-    <div>
+    <div className={classes.chart}>
       <HighchartsReact highcharts={Highcharts} options={options} />
     </div>
   )
