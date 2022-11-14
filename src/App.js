@@ -321,13 +321,11 @@ function App() {
       </Grid>
       <Grid container spacing={{ xs: 2 }} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent='center' alignItems="center">
         <Grid item xs={3}>
-          <div className={classes.marginLeft15}>
-            <Typography variant="h6" ml={9}>Total Tokens</Typography>
+          <div className={classes.total}>
+            <Typography variant="h6">Total Tokens</Typography>
             <div className={classes.totalTokens}>
               <img className={classes.seasonalLogo} src={SeasonalLogo} alt='Seasonal Token'/>
-              <div className={classes.totalField}>
-                <Field value={totalBalance}/>
-              </div>
+              <Typography variant='body1' ml={1}>{totalBalance.toFixed(2)}</Typography> 
             </div>
             <div className={classes.totalValue}>
               <Typography variant="h6">Total value</Typography>
