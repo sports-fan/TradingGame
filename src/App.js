@@ -219,10 +219,18 @@ function App() {
   }, [currentDate])
 
   useEffect(() => {
-    if (currentDate === INITIAL_DATE && !localStorage.getItem("isUserLoggedIn")) {
+    const loggedStatus = localStorage.getItem("isUserLoggedIn")
+    if (loggedStatus === null) {
       setOpenStart(true)
       localStorage.setItem("isUserLoggedIn", true)
-    } else if (currentDate === INITIAL_DATE) {
+    }
+    return () => {
+      localStorage.removeItem("isUserLoggedIn")
+    }
+  }, [])
+
+  useEffect(() => {
+    if (currentDate === INITIAL_DATE) {
       return
     }
     setAbsolutePrices(prev => {
@@ -271,41 +279,42 @@ function App() {
       </div>
       <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent='center' alignItems="center">
         <Grid item xs={6}>
-          <div>
-            <Grid container justifyContent='center' alignItems="center">
-              <Grid item xs={6}>
-                <Typography variant="h6" ml={10}>
-                  Your tokens
-                </Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant="h6" ml={5}>
-                  Prices
-                </Typography>
-              </Grid>
-              {ICON_SVG.map((item, idx) => (
-                <React.Fragment key={idx}>
-                  <Grid item xs={6}>
-                    <LogoField
-                      key={idx}
-                      value={currentBalance[idx].toFixed(2)}
-                      img={item}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Grid container>
-                      <Grid item xs={4}>
-                        <Field key={idx} value={relativePrices[idx].toFixed(5)}/>
-                      </Grid>
-                      <Grid item xs={8}>
-                        <Field key={idx} value='cents'/>
-                      </Grid>
+          <Grid container>
+            <Grid item xs={6}>
+              <Typography variant="h6" ml={10}>
+                Your tokens
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography variant="h6" ml={5}>
+                Prices
+              </Typography>
+            </Grid>
+          </Grid>
+          <hr className={classes.hr} />
+          <Grid container>
+            {ICON_SVG.map((item, idx) => (
+              <React.Fragment key={idx}>
+                <Grid item xs={6}>
+                  <LogoField
+                    key={idx}
+                    value={currentBalance[idx].toFixed(2)}
+                    img={item}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Grid container>
+                    <Grid item xs={4}>
+                      <Field key={idx} value={relativePrices[idx].toFixed(5)}/>
+                    </Grid>
+                    <Grid item xs={8}>
+                      <Field key={idx} value='cents'/>
                     </Grid>
                   </Grid>
-                </React.Fragment>
-              ))}
-            </Grid>
-          </div>
+                </Grid>
+              </React.Fragment>
+            ))}
+          </Grid>
         </Grid>
         <Grid item xs={6}>
           <div>
@@ -318,22 +327,18 @@ function App() {
           </div>
         </Grid>
       </Grid>
-      <Grid container spacing={{ xs: 2 }} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent='center' alignItems="center">
+      <Grid container spacing={{ xs: 2 }} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent='center' alignItems="top">
         <Grid item xs={3}>
-          <div className={classes.marginLeft15}>
-            <Typography variant="h6" ml={9}>Total Tokens</Typography>
+          <div className={classes.total}>
+            <Typography variant="h6">Total Tokens</Typography>
             <div className={classes.totalTokens}>
               <img className={classes.seasonalLogo} src={SeasonalLogo} alt='Seasonal Token'/>
-              <div className={classes.totalField}>
-                <Field value={totalBalance}/>
-              </div>
+              <Typography variant='body1' ml={1}>{totalBalance.toFixed(2)}</Typography> 
             </div>
-            <div className={classes.totalValue}>
-              <Typography variant="h6">Total value</Typography>
-              <Typography variant='body1' mt={2}>${totalPrice.toFixed(2)}</Typography> 
-            </div>
+            <Typography variant="h6" mt={1}>Total value</Typography>
+            <Typography variant='body1' mt={1}>${totalPrice.toFixed(2)}</Typography> 
           </div>
-          <div>
+          <div className={classes.actions}>
             <GameAction comment="Start trading">
               <IconButton color='inherit' onClick={handleStart}>
                 <StartIcon fontSize='large'/>
@@ -352,7 +357,7 @@ function App() {
           </div>
         </Grid>
         <Grid item xs={6}>
-          <Grid container>
+          <Grid container className={classes.tradefor}>
             <Grid item xs={6}>
               <Typography variant="h6">
                 Trade
@@ -368,7 +373,7 @@ function App() {
                 <Grid item xs={6}>
                   <LogoFieldClickable
                     key={idx}
-                    className={idx === selectedTradeId ? classes.img : null}
+                    classClicked={idx === selectedTradeId ? classes.img : null}
                     value={balanceTrade[idx]}
                     img={item}
                     onClick={() => handleTradeClick(idx)}
@@ -377,7 +382,7 @@ function App() {
                 <Grid item xs={6}>
                   <LogoFieldClickable
                     key={idx}
-                    className={idx === selectedForId ? classes.img : null}
+                    classClicked={idx === selectedForId ? classes.img : null}
                     value={balanceFor[idx]}
                     img={item}
                     onClick={() => handleForClick(idx)}
@@ -388,13 +393,12 @@ function App() {
           </Grid>
         </Grid>
         <Grid item xs={3}>
-          <div className={classes.display}>
+          <div className={classes.date}>
             <Typography variant="h6">
               Date
             </Typography>
             <div className={classes.marginLeft20}>
               <Typography
-              
                 variant='body1'
               >
                 {new Date(currentDate).toISOString().slice(0, 10)}

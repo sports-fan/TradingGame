@@ -1,29 +1,30 @@
 import Typography from '@mui/material/Typography';
+import * as cn from 'classnames';
 import { makeStyles } from "@mui/styles"
+
 
 const useStyles = makeStyles({
   logo: {
     display: 'flex',
     justifyContent: 'space-around',
     alignItems: 'center',
-    marginTop: 5,
-    marginBottom: 5,
+    paddingTop: 10,
     width: 210,
     height: 56
   },
   typography: {
-    marginTop: '-5px',
+    marginTop: '-2px',
     maxWidth: '150px',
     width: '150px',
   }
 })
 
-const LogoFieldClickable = ({onClick, className, value, img}) => {
+const LogoFieldClickable = ({onClick, classClicked, value, img}) => {
   const classes = useStyles()
   return (
-    <div className={classes.logo}>
-      <div className={className}>
-        <img src={img} alt="logo" onClick={onClick}/>
+    <div className={cn(classes.logo, classClicked)} onClick={onClick}>
+      <div>
+        <img src={img} alt="logo"/>
       </div>
       <div className={classes.typography}>
         <Typography

@@ -4,9 +4,10 @@ export default makeStyles(theme => ({
   container: {
     marginTop: 30
   },
-  display: {
+  date: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+
   },
   marginTop30: {
     marginTop: 30
@@ -14,40 +15,41 @@ export default makeStyles(theme => ({
   marginLeft20: {
     marginLeft: 20
   },
-  marginLeft15: {
-    marginLeft: 7
-  },
   executeBox: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    marginTop: 30,
-    border: 'solid',
+    borderRadius: 7,
+    backgroundColor: '#f6f6f6',
+    marginTop: 5,
     padding: 25,
     height: 120
   },
   img: {
-    border: 'solid'
+    backgroundColor: '#EEEEEE',
+    borderRadius: 7
+  },
+  total: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    backgroundColor: '#FAFAFA',
+    borderRadius: 7,
+    padding: '1.5em 1em 1.5em 1em'
   },
   totalTokens: {
     display: 'flex',
-    justifyContent: 'flex-start',
     alignItems: 'center',
-    height: 60
+    height: 45
   },
   seasonalLogo: {
-    width: 45,
-    height:  45
-  },
-  totalField: {
-    marginTop: 10,
-    marginLeft: 15
+    width: 35,
+    height:  35
   },
   totalValue: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    marginRight: 25
   },
   modebtn: {
     display: 'flex',
@@ -56,5 +58,17 @@ export default makeStyles(theme => ({
   },
   flex: {
     display: 'flex',
+  },
+  hr: {
+    marginBottom: '2em',
+    color: '#CCCCCC'
+  },
+  actions: {
+    margin: '1em'
+  },
+  tradefor: {
+    marginBottom: '1em',
+    paddingLeft: '2em',
+    paddingRight: '2em'
   }
 }))
